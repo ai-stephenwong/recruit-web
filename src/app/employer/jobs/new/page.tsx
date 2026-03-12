@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { jobsApi } from '@/lib/api'
 import { getUser } from '@/lib/auth'
-import { JOB_CATEGORIES, HK_LOCATIONS } from '@/types'
+import { JOB_CATEGORIES, HK_LOCATIONS, type Job } from '@/types'
 
 export default function NewJobPage() {
   const router = useRouter()
@@ -28,6 +28,7 @@ export default function NewJobPage() {
     try {
       await jobsApi.create({
         ...form,
+        employment_type: form.employment_type as Job['employment_type'],
         salary_min: form.salary_min ? Number(form.salary_min) : undefined,
         salary_max: form.salary_max ? Number(form.salary_max) : undefined,
         status: 'active',
