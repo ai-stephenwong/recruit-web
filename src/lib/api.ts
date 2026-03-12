@@ -18,50 +18,63 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 // Auth
 export const authApi = {
-  register: (email: string, password: string, role: 'candidate' | 'employer') =>
-    request<{ token: string; user: User }>('/api/auth/register', {
+  register: async (email: string, password: string, role: 'candidate' | 'employer') => {
+    const r = await request<{ access_token: string; user: User }>('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify({ email, password, role }),
-    }),
-  login: (email: string, password: string) =>
-    request<{ token: string; user: User }>('/api/auth/login', {
+    })
+    return { token: r.access_token, user: r.user }
+  },
+  login: async (email: string, password: string) => {
+    const r = await request<{ access_token: string; user: User }>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
-    }),
-  me: () => request<User>('/api/auth/me'),
+    })
+    return { token: r.access_token, user: r.user }
+  },
+  me: () => request<{ user: User }>('/api/auth/me').then(r => r.user),
 }
 
 // Jobs
 export const jobsApi = {
-  list: (params?: Record<string, string>) => {
+  list: async (params?: Record<string, string>) => {
     const qs = params ? '?' + new URLSearchParams(params).toString() : ''
-    return request<{ jobs: Job[]; total: number; page: number; limit: number }>(`/api/jobs${qs}`)
+    const r = await request<{ data: Job[]; pagination: { total: number; page: number; limit: number } }>(`/api/jobs${qs}`)
+    return { jobs: r.data, total: r.pagination.total, page: r.pagination.page, limit: r.pagination.limit }
   },
-  get: (id: number) => request<Job>(`/api/jobs/${id}`),
-  featured: () => request<{ jobs: Job[] }>('/api/jobs/featured'),
+  get: (id: number) => request<{ data: Job }>(`/api/jobs/${id}`).then(r => r.data),
+  featured: async () => {
+    const r = await request<{ data: Job[] }>('/api/jobs/featured')
+    return { jobs: r.data }
+  },
   create: (data: Partial<Job>) =>
-    request<Job>('/api/jobs', { method: 'POST', body: JSON.stringify(data) }),
+    request<{ data: Job }>('/api/jobs', { method: 'POST', body: JSON.stringify(data) }).then(r => r.data),
   update: (id: number, data: Partial<Job>) =>
-    request<Job>(`/api/jobs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    request<{ data: Job }>(`/api/jobs/${id}`, { method: 'PUT', body: JSON.stringify(data) }).then(r => r.data),
   delete: (id: number) =>
     request<{ message: string }>(`/api/jobs/${id}`, { method: 'DELETE' }),
-  myJobs: () =>
-    request<{ jobs: Job[] }>('/api/jobs?my=true'),
+  myJobs: async () => {
+    const r = await request<{ data: Job[]; pagination: { total: number } }>('/api/jobs?my=true')
+    return { jobs: r.data }
+  },
 }
 
 // Applications
 export const applicationsApi = {
   apply: (jobId: number) =>
-    request<Application>('/api/applications', {
+    request<{ data: Application }>('/api/applications', {
       method: 'POST',
       body: JSON.stringify({ job_id: jobId }),
-    }),
-  list: () => request<{ applications: Application[] }>('/api/applications'),
+    }).then(r => r.data),
+  list: async () => {
+    const r = await request<{ data: Application[]; pagination: { total: number } }>('/api/applications')
+    return { applications: r.data }
+  },
   updateStatus: (id: number, status: Application['status']) =>
-    request<Application>(`/api/applications/${id}/status`, {
+    request<{ data: Application }>(`/api/applications/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status }),
-    }),
+    }).then(r => r.data),
 }
 
 // Candidate
@@ -86,6 +99,9 @@ export const employerApi = {
 
 // Articles
 export const articlesApi = {
-  list: () => request<{ articles: Article[] }>('/api/articles'),
-  get: (slug: string) => request<Article>(`/api/articles/${slug}`),
+  list: async () => {
+    const r = await request<{ data: Article[]; pagination: { total: number } }>('/api/articles')
+    return { articles: r.data }
+  },
+  get: (slug: string) => request<{ data: Article }>(`/api/articles/${slug}`).then(r => r.data),
 }
