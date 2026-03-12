@@ -60,6 +60,18 @@ export interface Article {
   published_at?: string
 }
 
+export interface JobAlert {
+  id: number
+  candidate_id: number
+  keywords: string | null
+  category: string | null
+  location: string | null
+  employment_type: string | null
+  salary_min: number | null
+  is_active: number
+  created_at: string
+}
+
 export interface ApiResponse<T> {
   data?: T
   error?: string

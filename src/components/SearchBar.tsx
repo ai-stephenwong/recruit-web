@@ -38,7 +38,7 @@ export default function SearchBar({ defaultKeyword = '', defaultLocation = '', d
             placeholder="Job title, keywords, company..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            className="flex-1 py-2.5 text-sm focus:outline-none"
+            className="flex-1 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none"
           />
         </div>
         <div className="h-px md:h-auto md:w-px bg-gray-200 mx-1" />

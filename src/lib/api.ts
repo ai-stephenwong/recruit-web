@@ -105,3 +105,31 @@ export const articlesApi = {
   },
   get: (slug: string) => request<{ data: Article }>(`/api/articles/${slug}`).then(r => r.data),
 }
+
+// Saved Jobs
+export const savedJobsApi = {
+  list: async () => {
+    const r = await request<{ data: Job[] }>('/api/saved')
+    return r.data
+  },
+  getIds: async () => {
+    const r = await request<{ data: number[] }>('/api/saved/ids')
+    return r.data
+  },
+  save: (jobId: number) =>
+    request<{ message: string }>(`/api/saved/${jobId}`, { method: 'POST' }),
+  unsave: (jobId: number) =>
+    request<{ message: string }>(`/api/saved/${jobId}`, { method: 'DELETE' }),
+}
+
+// Job Alerts
+export const alertsApi = {
+  list: async () => {
+    const r = await request<{ data: any[] }>('/api/alerts')
+    return r.data
+  },
+  create: (data: { keywords?: string; category?: string; location?: string; employment_type?: string; salary_min?: number }) =>
+    request<{ data: any }>('/api/alerts', { method: 'POST', body: JSON.stringify(data) }),
+  delete: (id: number) =>
+    request<{ message: string }>(`/api/alerts/${id}`, { method: 'DELETE' }),
+}

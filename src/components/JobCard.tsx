@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Job } from '@/types'
+import SaveJobButton from './SaveJobButton'
 
 interface JobCardProps {
   job: Job
@@ -29,6 +30,7 @@ export default function JobCard({ job, compact = false }: JobCardProps) {
     <Link href={`/jobs/${job.id}`} className="card block p-5 group">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 flex-1 min-w-0">
+
           {/* Company logo placeholder */}
           <div className="w-11 h-11 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
             <span className="text-primary-700 font-bold text-sm">
@@ -50,6 +52,7 @@ export default function JobCard({ job, compact = false }: JobCardProps) {
             )}
           </div>
         </div>
+        <SaveJobButton jobId={job.id} />
       </div>
 
       <div className="mt-3 flex items-center gap-3 flex-wrap">

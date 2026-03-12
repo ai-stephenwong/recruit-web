@@ -59,6 +59,9 @@ export default function Navbar() {
                 <Link href="/dashboard" className="text-sm text-gray-600 hover:text-primary-700 font-medium">
                   Dashboard
                 </Link>
+                <Link href="/dashboard/alerts" className="text-sm text-gray-600 hover:text-primary-700 font-medium">
+                  Alerts
+                </Link>
                 <Link href="/dashboard/profile" className="text-sm text-gray-600 hover:text-primary-700 font-medium">
                   Profile
                 </Link>
@@ -103,6 +106,7 @@ export default function Navbar() {
           {user?.role === 'candidate' && (
             <>
               <Link href="/dashboard" className="block py-2 text-sm text-gray-700" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link href="/dashboard/alerts" className="block py-2 text-sm text-gray-700" onClick={() => setMenuOpen(false)}>Alerts</Link>
               <Link href="/dashboard/profile" className="block py-2 text-sm text-gray-700" onClick={() => setMenuOpen(false)}>Profile</Link>
             </>
           )}
