@@ -4,16 +4,17 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { getUser, clearAuth } from '@/lib/auth'
 import type { User } from '@/types'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     setUser(getUser())
-  }, [])
+  }, [pathname])
 
   function handleLogout() {
     clearAuth()
