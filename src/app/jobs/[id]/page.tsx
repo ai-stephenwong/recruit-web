@@ -22,6 +22,11 @@ export default function JobDetailPage() {
       .then(setJob)
       .catch(() => {})
       .finally(() => setLoading(false))
+    if (user?.role === 'candidate') {
+      applicationsApi.list()
+        .then(r => { if (r.applications.some((a: any) => a.job_id === Number(id))) setApplied(true) })
+        .catch(() => {})
+    }
   }, [id])
 
   async function handleApply() {
@@ -33,7 +38,8 @@ export default function JobDetailPage() {
       await applicationsApi.apply(Number(id))
       setApplied(true)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to apply')
+      const msg = e instanceof Error ? e.message : 'Failed to apply'
+      setError(msg.toLowerCase().includes('already') ? 'You have already applied to this job.' : msg)
     } finally {
       setApplying(false)
     }
