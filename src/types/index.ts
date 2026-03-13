@@ -28,7 +28,10 @@ export interface Application {
   candidate_id: number
   status: 'submitted' | 'viewed' | 'interview' | 'hired' | 'rejected'
   applied_at: string
-  job?: Job
+  job_title?: string
+  job_location?: string
+  employment_type?: string
+  company_name?: string
 }
 
 export interface CandidateProfile {

@@ -113,10 +113,10 @@ export default function DashboardPage() {
                 <div key={app.id} className="px-5 py-4 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <Link href={`/jobs/${app.job_id}`} className="font-medium text-gray-900 hover:text-primary-700 truncate block">
-                      {app.job?.title || `Job #${app.job_id}`}
+                      {app.job_title || `Job #${app.job_id}`}
                     </Link>
                     <p className="text-sm text-gray-500 mt-0.5">
-                      {app.job?.company_name} · {app.job?.location}
+                      {app.company_name} · {app.job_location}
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5">
                       Applied {new Date(app.applied_at).toLocaleDateString('en-HK')}
